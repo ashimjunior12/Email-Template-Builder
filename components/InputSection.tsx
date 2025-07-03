@@ -10,6 +10,10 @@ const InputSection = () => {
  const [username,setUsername] = useState("")
  const [title,setTitle] = useState("")
  // const [message, setMessage] = useState("Hello username")
+ const [mergeTags, setMergeTags] = useState<{ [key: string]: string }>({});
+const [mergeInput, setMergeInput] = useState(
+  '{"user":"Ram", "email":"ram@example.com"}'
+);
  const [html,setHtml] = useState("<h1>Hello</h1>")
  const [styles, setStyles] = useState({
    padding: '0px',
@@ -26,7 +30,8 @@ const InputSection = () => {
       username,
       title,
       html,
-      styles
+      styles,
+      mergeTags
     }),
     headers: {
       "Content-Type": "application/json"
@@ -133,6 +138,30 @@ const InputSection = () => {
 
           {/* textarea */}
 
+          {/* Merge Fields */}
+          <div className='mb-5'>
+            <label className='block mb-2 text-sm font-medium text-gray-900'>
+              Merge Tags (JSON)
+            </label>
+            <textarea
+              rows={4}
+              className='block p-2.5 w-full text-sm text-gray-900 rounded-lg border border-gray-300 mb-5'
+              placeholder='{"user":"Ram","email":"ram@example.com"}'
+              value={mergeInput}
+              onChange={(e) => {
+                setMergeInput(e.target.value);
+                try {
+                  const obj = JSON.parse(e.target.value);
+                  setMergeTags(obj);
+                } catch (err) {
+                  console.error('Invalid JSON');
+                }
+              }}
+            />
+          </div>
+
+          {/* Merge Fields */}
+
           {/* Range Slider */}
 
           <input
@@ -141,8 +170,8 @@ const InputSection = () => {
             value={parseInt(styles.padding)}
             className='w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 mb-10'
             onChange={(e) =>
-             setStyles({ ...styles, padding: e.target.value + 'px' })
-           }
+              setStyles({ ...styles, padding: e.target.value + 'px' })
+            }
           />
 
           {/* Range Slider */}
@@ -211,6 +240,7 @@ const InputSection = () => {
           styles={styles}
           preview={preview}
           html={html}
+          mergeTags={mergeTags}
         />
       </section>
       {/* preview section */}

@@ -19,9 +19,16 @@ type Props = {
   styles: React.CSSProperties;
   preview: boolean;
   html: string;
+  mergeTags: Record<string, string>;
 };
 
 
+const applyMergeTags = (html: string, tags: Record<string, string>) => {
+  return Object.keys(tags).reduce((acc, key) => {
+    const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'g');
+    return acc.replace(regex, tags[key]);
+  }, html);
+};
 
 
 const Welcome = ({
@@ -30,7 +37,7 @@ const Welcome = ({
   title, 
   styles,
   preview,
-  html
+  html, mergeTags
 }: Props) => {
   return (
     <>
@@ -113,7 +120,7 @@ const Welcome = ({
                     padding: '4px',
                   }}
                 >
-                  {html}
+                  {applyMergeTags(html, mergeTags)}
                 </Markdown>
               </Section>
               <Button
@@ -124,15 +131,15 @@ const Welcome = ({
                   padding: '5px',
                   outline: 'none',
                   color: 'white',
-                  fontSize: '0.875rem', 
-                  borderRadius: '0.5rem', 
-                  fontWeight: '500', 
-                  marginRight: '0.5rem', 
+                  fontSize: '0.875rem',
+                  borderRadius: '0.5rem',
+                  fontWeight: '500',
+                  marginRight: '0.5rem',
                   marginBottom: '0.5rem',
                 }}
               >
                 Click me
-              </Button> 
+              </Button>
             </Container>
           </Body>
         </Html>

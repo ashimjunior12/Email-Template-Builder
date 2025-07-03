@@ -5,7 +5,7 @@ import Welcome from '@/components/Welcome';
 
 export async function POST(req: Request) {
   try {
-    const { email, username, title, html, styles } = await req.json();
+    const { email, username, title, html, styles, mergeTags } = await req.json();
 
     const emailHtml = await render(
       <Welcome
